@@ -20,7 +20,8 @@ Module().then((instance) => {
 // Settings
 const settings = {
   colors: {
-    circle: "#3182bd"
+    blue: "#3182bd",
+    red: "#FF0000"
   }
 };
 
@@ -44,10 +45,27 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Create a simple dot
 const dotGeometry = new THREE.CircleGeometry(0.02, 32); // Small dot
-const dotMaterial = new THREE.MeshBasicMaterial({ color: new THREE.Color(settings.colors.circle) });
-const dot = new THREE.Mesh(dotGeometry, dotMaterial);
-dot.position.set(0, -1.1, 0)
-scene.add(dot);
+const dotMaterialBlue = new THREE.MeshBasicMaterial({ color: new THREE.Color(settings.colors.blue) });
+const dotMaterialRed = new THREE.MeshBasicMaterial({ color: new THREE.Color(settings.colors.red) });
+const blueDot = new THREE.Mesh(dotGeometry, dotMaterialBlue);
+const redDot = new THREE.Mesh(dotGeometry, dotMaterialRed);
+blueDot.position.set(1, 0, 0)
+redDot.position.set(-1, 0, 0)
+scene.add(blueDot, redDot);
+
+
+function updateXPositionToCenter(dot) {
+  let currentXposition = dot.position.x;
+  let newXPosition;
+  // console.log(dot)
+  if (Math.sign(currentXposition) == 1) {
+    newXPosition = currentXposition - 0.01;
+  } else {
+    console.log("here")
+    newXPosition = currentXposition + 0.01;
+  }
+  dot.position.set(newXPosition, 0, 0)
+}
 
 // Render the scene
 function animate() {
@@ -55,18 +73,12 @@ function animate() {
   renderer.render(scene, camera);
 
   
-  let currentYposition = dot.position.y;
-  if (addFunction) {
-    // addFunction(currentYposition, 10)
-    console.log(addFunction(22, 32));
-  }
+  updateXPositionToCenter(blueDot)
+  updateXPositionToCenter(redDot)
 
-  if (updatePosition) {
-    const newYPosition = updatePosition(currentYposition);
-    dot.position.set(0, newYPosition, 0);
-  }
+  // console.log(`Dot position: ${currentYposition}`);
+  // console.log(`hwhw; ${Math.sign(-3)}`);
 
-  console.log(`Dot position: ${currentYposition}`);
 
 
   // let currentYposition = dot.position.y;
